@@ -7,12 +7,14 @@ from cs50 import SQL
 import numpy as np
 import sqlite3
 from datetime import datetime, timedelta
+from flask_cors import CORS
 
-# db = SQL("sqlite:///data.db")
+db = SQL("sqlite:///data.db")
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 app = Flask(__name__)
+CORS(app)
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -72,7 +74,7 @@ def login():
     # Create session if highest confidence is greater than 40
     if highest_confidence > 40:
         session["user_id"] = user["user_id"]
-
+        return str(user["user_id"])
     return redirect("/")
 
 #It check whether the user have class which is within 1 hr. If so, return the course_id. Else, return No recent lectures

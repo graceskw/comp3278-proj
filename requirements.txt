@@ -1,2 +1,6 @@
 flask
 flask_session
+opencv-python
+opencv-contrib-python
+cs50
+flask-cors
