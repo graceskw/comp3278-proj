@@ -180,12 +180,15 @@ def get_materials(course_id, class_type):
     """, (course_id,))
 
     result = c.fetchone()
+    c.close()
+    conn.close()
     if result:
         course_info['name'] =  result[0]
         course_info['zoom_link'] = result[1]
         course_info['teacher'] = result[2]
 
     return course_info
+
 
 
 
