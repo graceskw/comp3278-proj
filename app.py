@@ -61,7 +61,7 @@ def login():
             resized_face = cv2.resize(gray[y:y+h, x:x+w], (200, 200))
 
             # Predict the label and confidence for the resized face
-            label, confidence = recognizer.predict(resized_face)
+            label, confidence = recognizer.predict(resized_face) 
             print("User:", user["user_id"], "Confidence:", confidence)
 
             if confidence > highest_confidence:
