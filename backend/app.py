@@ -22,13 +22,13 @@ Session(app)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 
-@app.route("/")
-def index():
-    if len(session) > 0:
-        print("PRINTING SESSION")
-        print(session)
-        return redirect("/success")
-    return render_template("index.html")
+# @app.route("/")
+# def index():
+#     if len(session) > 0:
+#         print("PRINTING SESSION")
+#         print(session)
+#         return redirect("/success")
+#     return render_template("index.html")
 @app.route("/login", methods=["POST"])
 def login():
     # Print a message to the console
