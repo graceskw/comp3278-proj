@@ -9,7 +9,8 @@ import Login from './login.jsx'
 import Timetable from './timetable.jsx'
 import Component from './component.jsx'
 import Upcoming from './upcoming.jsx'
-import './index.css'
+// import './index.css'
+import './main.css'
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,26 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <div style={{width: "100%"}}>
     {/* <Component /> */}
-    <RouterProvider router={router} />
+    {/* <body> */}
+    <div className="area" style={{width: "100%"}}>
+        <ul className="circles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            
+        </ul>
+        <div className='route' style={{ }}>
+          <RouterProvider router={router} />
+        </div>
+    </div>
+{/* </body> */}
     {/* <Timetable /> */}
     {/* <Upcoming /> */}
     </div>
