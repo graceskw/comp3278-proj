@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import {
-    AppBar,
-    Box,
-    Toolbar,
-    IconButton,
-    Typography,
-    Menu,
-    Container,
-    Button,
-    Tooltip,
-    MenuItem,
-}from '@mui/material/';
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Button,
+  Tooltip,
+  MenuItem,
+} from '@mui/material/';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 
 const settings = ['Profile', 'Logout'];
@@ -33,20 +33,20 @@ function ResponsiveAppBar() {
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
             <Button
-                component={Link} to="/upcoming"
-                variant='outlined'
-                sx={{ my: 2, color: 'white', display: 'block', borderWidth: 2, borderColor: '#9dc8f3', marginRight: '10px' }}
-              >
-                Upcoming
-              </Button>
+              component={Link} to="/upcoming"
+              variant='outlined'
+              sx={{ my: 2, color: 'white', display: 'block', borderWidth: 2, borderColor: '#9dc8f3', marginRight: '10px' }}
+            >
+              Upcoming
+            </Button>
 
             <Button
-                component={Link} to="/timetable"
-                variant='outlined'
-                sx={{ my: 2, color: 'white', display: 'block', borderWidth: 2, borderColor: '#9dc8f3', marginRight: '10px' }}
-              >
-                Timetable
-              </Button>
+              component={Link} to="/timetable"
+              variant='outlined'
+              sx={{ my: 2, color: 'white', display: 'block', borderWidth: 2, borderColor: '#9dc8f3', marginRight: '10px' }}
+            >
+              Timetable
+            </Button>
 
           </Box>
 
