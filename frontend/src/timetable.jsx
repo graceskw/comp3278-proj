@@ -30,7 +30,8 @@ export default () => {
       <Scheduler
         // data={data}
         data={schedulerData}
-        height={500}
+        // height={500}
+        sx={{ display: "absolute", left:0, right:0, height: "100vh", width: "100vw" }}
         firstDayOfWeek={1}
         // data={appointments}
       >
