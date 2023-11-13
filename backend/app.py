@@ -113,10 +113,10 @@ def check_1hr(user_id):
     JOIN class c ON e.course_id = c.course_id
     WHERE e.user_id = ? 
     AND c.weekday = ? 
-    AND c.start_time BETWEEN ? AND ?;
+    AND (c.start_time BETWEEN ? AND ? OR ? BETWEEN c.start_time AND c.end_time);
     """
     print(current_time_str, next_hour_str)
-    c.execute(query, (user_id, weekday, current_time_str, next_hour_str))
+    c.execute(query, (user_id, weekday, current_time_str, next_hour_str, current_time_str))
 
     result = c.fetchone()
 
