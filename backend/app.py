@@ -8,6 +8,7 @@ import numpy as np
 import sqlite3
 from datetime import datetime, timedelta
 from flask_cors import CORS
+from flask_mail import Mail, Message
 
 db = SQL("sqlite:///data.db")
 
@@ -21,6 +22,18 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
+mail_settings = {
+    "MAIL_SERVER": 'smtp.office365.com',
+    "MAIL_PORT": 587,
+    "MAIL_USE_TLS": True,
+    "MAIL_USE_SSL": False,
+    "MAIL_USERNAME": 'miscellaneous_acc@outlook.com',
+    "MAIL_PASSWORD": 'comp3278',
+    }
+    
+    # app = Flask(__name__)
+app.config.update(mail_settings)
+mail= Mail(app)
 
 # @app.route("/")
 # def index():
@@ -236,13 +249,21 @@ def get_course_time(user_id):
     c.close()
     conn.close()
     return time_schedule
-
-
-
 @app.route("/success", methods=["GET"])
 def success():
     # Return success.html
     return "Success!"
+
+@app.route("/sendEmail/<int:user_id>", methods=["GET"])
+def sendEmail(user_id):
+    msg = Message('Upcoming class reminder', sender = 'miscellaneous_acc@outlook.com', recipients = ['miscellaneous_acc@outlook.com'])
+    msg.body = "This is the email body"
+    # later when db is complete, change email body to upcoming class info
+    # result = check_1hr(user_id)
+    # msg.body = result
+    mail.send(msg)
+    
+    return "Sent"
 
 if __name__ == '__main__':
     app.run()
