@@ -8,11 +8,14 @@ CREATE TABLE users (
 -- Create the 'course' table
 CREATE TABLE course (
     course_id INT PRIMARY KEY,
+    course_code VARCHAR(25),
     name VARCHAR(255),
     zoom_link VARCHAR(255),
     teacher VARCHAR(255),
+    course_brief VARCHAR(500)
     -- site_link VARCHAR(255)
 );
+
 
 -- Create the 'course material' table
 CREATE TABLE course_material(

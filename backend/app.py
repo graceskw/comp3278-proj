@@ -88,9 +88,9 @@ def check_1hr(user_id):
     next_hour = current_time + timedelta(hours=1)
     next_hour_str = next_hour.strftime("%H:%M:%S")
 
-    weekday = current_time.weekday()
+    weekday = (current_time.weekday()+1)%7
 
-    conn = sqlite3.connect('data.db')
+    conn = sqlite3.connect('main.db')
     c = conn.cursor()
 
 
@@ -118,7 +118,7 @@ def check_1hr(user_id):
 
 @app.route("/course_info/<int:course_id>/<class_type>")
 def get_materials(course_id, class_type):
-    conn = sqlite3.connect('data.db')
+    conn = sqlite3.connect('main.db')
     c = conn.cursor()
     c.execute("""
     SELECT material_type, material_link
@@ -140,7 +140,7 @@ def get_materials(course_id, class_type):
         else:
             course_info[mat_type] = [mat_link]
     
-    conn = sqlite3.connect('data.db')
+    conn = sqlite3.connect('main.db')
     c = conn.cursor()
 
     c.execute("""
@@ -171,12 +171,12 @@ def get_materials(course_id, class_type):
     if result:
         mess_arr = []
         for row in result:
-            temp = [result[0], result[1]]
+            temp = [row[0], row[1]]
             mess_arr.append(temp)
         course_info['message'] = mess_arr
     
     c.execute("""
-    SELECT name, zoom_link, teacher
+    SELECT name, zoom_link, teacher, course_code, course_brief
     FROM course
     WHERE course_id = ?
     """, (course_id,))
@@ -188,9 +188,54 @@ def get_materials(course_id, class_type):
         course_info['name'] =  result[0]
         course_info['zoom_link'] = result[1]
         course_info['teacher'] = result[2]
+        course_info['course_code'] = result[3]
+        course_info['course_brief'] = result[4]
 
     return course_info
 
+#It return the array of dictionary where each dictionaryhave the key of ['course_id', 'course_code', 'class_type', 'weekday', 'start_time', 'end_time']
+@app.route("/course_schedule/<int:user_id>")
+def get_course_time(user_id):
+    # Execute the query with parameter binding
+    conn = sqlite3.connect('main.db')
+    c = conn.cursor()
+
+    query = "SELECT course_id FROM enrollment WHERE user_id = ?"
+    c.execute(query, (user_id,))
+    result = c.fetchall()
+    course_id_arr = []
+    if result:
+        for row in result:
+            course_id_arr.append(row[0])
+    else:
+        c.close()
+        conn.close()
+        return "No course"
+    
+    query = """
+        SELECT c.course_id, c.course_code, cl.class_type, cl.weekday, cl.start_time, cl.end_time
+        FROM course AS c
+        JOIN class AS cl ON c.course_id = cl.course_id
+        WHERE c.course_id IN ({})
+    """.format(','.join(['?'] * len(course_id_arr)))
+
+    c.execute(query, course_id_arr)
+
+    # Fetch the results
+    results = c.fetchall()
+
+    keys = ['course_id', 'course_code', 'class_type', 'weekday', 'start_time', 'end_time']
+    time_schedule = []
+
+    # Iterate over the results and create a dictionary for each row
+    for row in results:
+        row_dict = dict(zip(keys, row))
+        time_schedule.append(row_dict)
+
+    # Return the time schedule array
+    c.close()
+    conn.close()
+    return time_schedule
 
 
 
