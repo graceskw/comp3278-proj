@@ -4,3 +4,4 @@ opencv-python
 opencv-contrib-python
 cs50
 flask-cors
+flask_mail

@@ -48,6 +48,20 @@ export default function ControlledAccordions() {
 		otherMaterials: 'Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit amet egestas eros, vitae egestas augue. Duis vel est augue.',
 	}
 
+	const sendEmail = () => {
+		setOpenEmail(false);
+		fetch(`http://localhost:5000/sendEmail/${sessionStorage.getItem("user")}`, {
+            method: 'GET',
+        })
+        .then(() => {
+			// console.log('response:',response);
+			alert('Email sent successfully!');
+        })        
+        .catch(function(error) {
+	        console.error('Error sending the email in backend: ', error);
+        });
+	}
+
 	return (
 		<div>
 			<Card sx={{ minWidth: 275}} className='acrylic'>
@@ -138,7 +152,7 @@ export default function ControlledAccordions() {
 					</DialogContent>
 					<DialogActions>
 						<Button onClick={handleCloseEmail} sx={{ backgroundColor: "red", color: 'black' }}>Cancel</Button>
-						<Button onClick={handleCloseEmail} variant='outlined'>Send</Button>
+						<Button onClick={sendEmail} variant='outlined'>Send</Button>
 					</DialogActions>
 				</Dialog>
 
