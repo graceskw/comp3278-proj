@@ -115,7 +115,7 @@ def check_1hr(user_id):
     AND c.weekday = ? 
     AND c.start_time BETWEEN ? AND ?;
     """
-
+    print(current_time_str, next_hour_str)
     c.execute(query, (user_id, weekday, current_time_str, next_hour_str))
 
     result = c.fetchone()
@@ -124,7 +124,7 @@ def check_1hr(user_id):
     conn.close()
 
     if result:
-        return result
+        return [result[0], result[1]]
     else:
         return "No recent lectures"
 
