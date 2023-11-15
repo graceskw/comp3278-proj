@@ -36,18 +36,34 @@ export default function ControlledAccordions() {
 	const [openEmail, setOpenEmail] = React.useState(false);
 	const handleOpenEmail = () => setOpenEmail(true);
 	const handleCloseEmail = () => setOpenEmail(false);
+	const [db, setData] = React.useState(null);
+	  React.useEffect(() => {
+		fetchData();
+	  }, []);
 
-	const db = {
-		upcomingCourse: 'COMP3278 Introduction to database management systems [Section 1A, 2023]',
-		upcomingCourseTime: '1:30pm-3:20pm',
-		upcomingCourseLocation: 'MWT1',
-		teacherMessage: 'Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.',
-		general: 'Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.',
-		lectureNotes: 'Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar diam eros in elit. Pellentesque convallis laoreet laoreet.',
-		tutorialNotes: 'Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit amet egestas eros, vitae egestas augue. Duis vel est augue.',
-		otherMaterials: 'Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit amet egestas eros, vitae egestas augue. Duis vel est augue.',
-	}
-
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/get_course_data');
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
+/*   const db = {
+ 	upcomingCourse: 'Null',
+	upcomingCourseTime: '1:30pm-3:20pm',
+	upcomingCourseLocation: 'MWT1',
+	teacherMessage: 'Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.',
+	general: 'Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id dignissim quam.',
+	lectureNotes: 'Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar diam eros in elit. Pellentesque convallis laoreet laoreet.',
+	tutorialNotes: 'Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit amet egestas eros, vitae egestas augue. Duis vel est augue.',
+	otherMaterials: 'Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit amet egestas eros, vitae egestas augue. Duis vel est augue.',
+  } */
+  if (db === null) {
+	return <div>Loading...</div>; // Or any other loading indicator
+  }
 	const sendEmail = () => {
 		setOpenEmail(false);
 		fetch(`http://localhost:5000/sendEmail/${sessionStorage.getItem("user")}`, {
@@ -170,8 +186,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-						Aliquam eget maximus est, id dignissim quam.
+						{db.teacherMessage}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -188,8 +203,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-						Aliquam eget maximus est, id dignissim quam.
+						{db.general}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -204,9 +218,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus,
-						varius pulvinar diam eros in elit. Pellentesque convallis laoreet
-						laoreet.
+						{db.lectureNotes}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -226,8 +238,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit
-						amet egestas eros, vitae egestas augue. Duis vel est augue.
+						{db.tutorialNotes}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -242,8 +253,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit
-						amet egestas eros, vitae egestas augue. Duis vel est augue.
+						{db.otherMaterials}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>

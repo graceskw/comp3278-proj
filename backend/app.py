@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
 import base64
@@ -128,6 +128,20 @@ def check_1hr(user_id):
     else:
         return "No recent lectures"
 
+@app.route('/api/get_course_data', methods=['GET'])
+def get_course_data():
+    print("getting course data")
+    db = {
+        'upcomingCourse': 'COMP3278 Introduction to database management systems [Section 1A, 2023]',
+        'upcomingCourseTime': '1:30pm-3:20pm',
+        'upcomingCourseLocation': 'MWT1',
+        'teacherMessage': 'Backend Teacher Message.',
+        'general': 'General Placeholder.',
+        'lectureNotes': 'Lecture Notes Placeholder.',
+        'tutorialNotes': 'Tutorial Notes Placeholder.',
+        'otherMaterials': 'Other Materials Placeholder.'
+    }
+    return jsonify(db)
 
 @app.route("/course_info/<int:course_id>/<class_type>")
 def get_materials(course_id, class_type):
