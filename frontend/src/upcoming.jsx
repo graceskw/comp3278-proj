@@ -43,7 +43,7 @@ export default function ControlledAccordions() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/get_course_data');
+      const response = await fetch('http://localhost:5000/api/get_course_data/0'); // TODO: Replace '0' with user id.
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {

@@ -124,24 +124,72 @@ def check_1hr(user_id):
     conn.close()
 
     if result:
-        return get_materials(result[0], result[1])
+        return (result[0], result[1])
     else:
-        return "No recent lectures"
+        return False
 
-@app.route('/api/get_course_data', methods=['GET'])
-def get_course_data():
+@app.route('/api/get_course_data/<int:user_id>', methods=['GET'])
+def get_course_data(user_id):
     print("getting course data")
+    next_course = check_1hr(user_id)
     db = {
-        'upcomingCourse': 'COMP3278 Introduction to database management systems [Section 1A, 2023]',
-        'upcomingCourseTime': '1:30pm-3:20pm',
-        'upcomingCourseLocation': 'MWT1',
-        'teacherMessage': 'Backend Teacher Message.',
-        'general': 'General Placeholder.',
-        'lectureNotes': 'Lecture Notes Placeholder.',
-        'tutorialNotes': 'Tutorial Notes Placeholder.',
-        'otherMaterials': 'Other Materials Placeholder.'
+        'upcomingCourse': 'N/A',
+        'upcomingCourseTime': 'N/A',
+        'upcomingCourseLocation': 'N/A',
+        'teacherMessage': 'N/A',
+        'general': 'N/A',
+        'lectureNotes': 'N/A',
+        'tutorialNotes': 'N/A',
+        'otherMaterials': 'N/A'
     }
-    return jsonify(db)
+    if not next_course:
+        return jsonify(db)
+    else:
+        conn = sqlite3.connect('main.db')
+        c = conn.cursor()
+        c.execute("""
+        SELECT material_type, material_link
+        FROM course_material
+        WHERE course_id = ?
+        """, (next_course[0],))
+        rows = c.fetchall()
+        c.close()
+        conn.close()
+        mat_type_conversion = ['teacherMessage','general','lectureNotes','tutorialNotes','otherMaterials']
+        print("Rows" + str(rows))
+        for row in rows:
+            mat_type = row[0]
+            mat_content = row[1]
+            print("mat content" + str(mat_content))
+            db[mat_type_conversion[mat_type]] = mat_content
+        
+        conn = sqlite3.connect('main.db')
+        c = conn.cursor()
+
+        c.execute("""
+        SELECT location, start_time, end_time
+        FROM class
+        WHERE course_id = ? AND class_type = ?
+        """, (next_course[0], next_course[1]))
+
+        result = c.fetchone()
+        if result:
+            db['upcomingCourseLocation'] = result[0]
+            db['upcomingCourseTime'] = str(result[1]) + " - " + str(result[2])
+        
+        c.execute("""
+        SELECT name
+        FROM course
+        WHERE course_id = ?
+        """, (next_course[0],))
+
+        result = c.fetchone()
+        c.close()
+        conn.close()
+        if result:
+            db['upcomingCourse'] =  result[0]
+        
+        return jsonify(db)
 
 @app.route("/course_info/<int:course_id>/<class_type>")
 def get_materials(course_id, class_type):
@@ -272,8 +320,8 @@ def success():
 def sendEmail(user_id):
     msg = Message('Upcoming class reminder', sender = 'miscellaneous_acc@outlook.com', recipients = ['miscellaneous_acc@outlook.com'])
     result = check_1hr(user_id)
-    if(result == 'No recent lectures'):
-        msg.body = result
+    if not result:
+        msg.body = 'No upcoming class.'
     else:
         msg.body = str(get_materials(result[0], result[1]))
     # msg.body = str(get_materials(0,'lecture'))            # for testing

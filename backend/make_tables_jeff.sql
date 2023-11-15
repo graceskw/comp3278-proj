@@ -21,7 +21,7 @@ CREATE TABLE course (
 CREATE TABLE course_material(
     material_id INT PRIMARY KEY,
     course_id INT,
-    material_type VARCHAR(255), --assignments/lecture notes/ tutorial notes/ quiz/ midterm
+	material_type INT, --'0: Teacher's message, 1: General, 2: LectureNotes, 3: Tutorial Notes, 4: Other Materials'
     material_link VARCHAR(255),
     FOREIGN KEY (course_id) REFERENCES course(course_id)
 )
