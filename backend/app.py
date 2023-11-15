@@ -124,7 +124,7 @@ def check_1hr(user_id):
     conn.close()
 
     if result:
-        return [result[0], result[1]]
+        return get_materials(result[0], result[1])
     else:
         return "No recent lectures"
 
