@@ -257,10 +257,12 @@ def success():
 @app.route("/sendEmail/<int:user_id>", methods=["GET"])
 def sendEmail(user_id):
     msg = Message('Upcoming class reminder', sender = 'miscellaneous_acc@outlook.com', recipients = ['miscellaneous_acc@outlook.com'])
-    msg.body = "This is the email body"
-    # later when db is complete, change email body to upcoming class info
-    # result = check_1hr(user_id)
-    # msg.body = result
+    result = check_1hr(user_id)
+    if(result == 'No recent lectures'):
+        msg.body = result
+    else:
+        msg.body = str(get_materials(result[0], result[1]))
+    # msg.body = str(get_materials(0,'lecture'))            # for testing
     mail.send(msg)
     
     return "Sent"
