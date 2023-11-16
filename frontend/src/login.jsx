@@ -46,8 +46,19 @@ export default function Login() {
         })
         .then((response) => response.json()).then((responseJson) => {
             sessionStorage.setItem('user', responseJson);
-            // later if there isnt any classes within 1 hr, redirect to timetable
-            window.location.href = "/upcoming";
+            // if there isnt any classes within 1 hr, redirect to timetable
+            fetch(`http://localhost:5000/check_within1hr/${responseJson}`, {
+                method: 'GET',
+
+            })
+            .then((response) => response.json()).then((responseJson) => {
+                if (responseJson === 'N/A') {
+                    window.location.href = "/timetable";
+                }
+                else{
+                    window.location.href = "/upcoming";
+                }
+            })
             document.querySelector('.loginErr').style.display = 'none';
         })
         
