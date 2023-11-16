@@ -124,9 +124,11 @@ def check_1hr(user_id):
     conn.close()
 
     if result:
-        return (result[0], result[1])
+        # print(result[0], result[1])
+        # # return "class"
+        return get_materials(result[0], result[1])
     else:
-        return 'N/A'
+        return "N/A"
 
 @app.route('/api/get_course_data/<int:user_id>', methods=['GET'])
 def get_course_data(user_id):
@@ -323,7 +325,10 @@ def sendEmail(user_id):
     if not result:
         msg.body = 'No upcoming class.'
     else:
-        msg.body = str(get_materials(result[0], result[1]))
+        # print(result)
+        # print(get_materials(result[0], result[1]))
+        # msg.body = str(get_materials(result[0], result[1]))
+        msg.body = str(result)
     # msg.body = str(get_materials(0,'lecture'))            # for testing
     mail.send(msg)
     

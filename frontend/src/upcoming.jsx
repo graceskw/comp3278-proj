@@ -44,10 +44,12 @@ export default function ControlledAccordions() {
   const fetchData = async () => {
     try {
 		// console.log('sessionStorage.getItem', sessionStorage.getItem('user'))
-      const response = await fetch(`http://localhost:5000/api/get_course_data/${sessionStorage.getItem('user')}`); // TODO: Replace '0' with user id.
+      const response = await fetch(`http://localhost:5000/check_within1hr/${sessionStorage.getItem('user')}`); // TODO: Replace '0' with user id.
+    //   const response = await fetch(`http://localhost:5000/api/get_course_data/${sessionStorage.getItem('user')}`); // TODO: Replace '0' with user id.
     //   const response = await fetch('http://localhost:5000/api/get_course_data/0'); // TODO: Replace '0' with user id.
       const jsonData = await response.json();
       setData(jsonData);
+	//   console.log('jsonData', jsonData)
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -89,14 +91,16 @@ export default function ControlledAccordions() {
 					</Typography>
 					{/* change to data from db later */}
 					<Typography variant="h5" component="div">
-						{db.upcomingCourse=='N/A'? 'No upcoming course' : db.upcomingCourse}
+						{db.name=='N/A'? 'No upcoming course' : `${db.course_code} ${db.name}`}
 						{/* {db.upcomingCourse} */}
 					</Typography>
 					<Typography variant="body1">
-						{db.upcomingCourseTime}
+						{db.start_time=='N/A'? 'N/A' : `${db.start_time} to ${db.end_time}`}
+						{/* {db.upcomingCourseTime} */}
 					</Typography>
 					<Typography variant="body1">
-						{db.upcomingCourseLocation}
+						{db.location=='N/A'? 'N/A' : `@${db.location}`}
+						{/* {db.upcomingCourseLocation} */}
 					</Typography>
 				</CardContent>
 
@@ -127,18 +131,7 @@ export default function ControlledAccordions() {
 						<CloseIcon />
 					</IconButton>
 					<DialogContent dividers>
-						{/* {db.upcomingCourse=='N/A'? 'N/A' : db.} */}
-						{/* <Typography gutterBottom>
-							<a href="https://www.google.com" target='_blank' rel='noreferrer'>Thursday, November 9, 2023 at 1:26:41 PM</a>
-						</Typography>
-						<Divider />
-						<Typography gutterBottom>
-							<a href="https://www.google.com" target='_blank' rel='noreferrer'>Monday, November 6, 2023 at 2:24:26 PM</a>
-						</Typography>
-						<Divider />
-						<Typography gutterBottom>
-							<a href="https://www.google.com" target='_blank' rel='noreferrer'>Thursday, November 2, 2023 at 1:23:54 PM</a>
-						</Typography> */}
+						{db.zoom_link=='N/A'? 'N/A' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>}
 					</DialogContent>
 				</Dialog>
 
@@ -165,9 +158,12 @@ export default function ControlledAccordions() {
 					</IconButton>
 					<DialogContent dividers>
 						<Typography gutterBottom>
-							{db.upcomingCourse} <br />
-							{db.upcomingCourseTime}<br />
-							{db.upcomingCourseLocation}
+							{db.name=='N/A'? 'No upcoming course' : `${db.course_code} ${db.name}`} <br/>
+							{db.start_time=='N/A'? 'N/A' : `${db.start_time} to ${db.end_time}`} <br/>
+							{db.location=='N/A'? 'N/A' : `@${db.location}`} <br/>
+							{db.zoom_link=='N/A'? 'N/A' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>} <br/>
+							{`Teacher's message: ${db.message}`} <br/>
+							{db.Note===undefined? 'Notes: N/A' : `Notes: ${db.Note}`} <br/>
 						</Typography>
 					</DialogContent>
 					<DialogActions>
@@ -190,7 +186,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						{db.teacherMessage}
+						{db.message}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -207,7 +203,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						{db.general}
+						{db.teacher}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -222,7 +218,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						{db.lectureNotes}
+						{<a href={db.Note} target='_blank' rel='noreferrer'>{db.Note}</a>}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -242,7 +238,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						{db.tutorialNotes}
+						{<a href={db.Note} target='_blank' rel='noreferrer'>{db.Note}</a>}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
