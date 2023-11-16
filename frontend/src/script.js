@@ -7,11 +7,11 @@ function startVideo() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     // Access the camera
     navigator.mediaDevices.getUserMedia({ video: true })
-      .then(function(stream) {
+      .then(function (stream) {
         // Set the camera stream as the source of the video element
         video.srcObject = stream;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.error('Error accessing the camera: ', error);
       });
   } else {
@@ -38,11 +38,11 @@ function captureImage() {
     },
     body: JSON.stringify({ image: imageData })
   })
-    .then(function(response) {
+    .then(function (response) {
       // Handle the response from the backend
       // ...
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.error('Error sending the image to the backend: ', error);
     });
 }

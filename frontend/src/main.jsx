@@ -9,50 +9,55 @@ import Login from './login.jsx'
 import Timetable from './timetable.jsx'
 import Component from './component.jsx'
 import Upcoming from './upcoming.jsx'
+import Profile from './profile.jsx'
 // import './index.css'
 import './main.css'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login/>,
+    element: <Login />,
   },
   {
     path: "/upcoming",
-    element: <><Component /><Upcoming/></>,
+    element: <><Component /><Upcoming /></>,
   },
   {
     path: "/timetable",
-    element: <><Component /><Timetable/></>,
+    element: <><Component /><Timetable /></>,
+  },
+  {
+    path: "/profile",
+    element: <><Component /><Profile /></>,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <div style={{width: "100%"}}>
-    {/* <Component /> */}
-    {/* <body> */}
-    <div className="area" style={{width: "100%"}}>
+    <div style={{ width: "100%" }}>
+      {/* <Component /> */}
+      {/* <body> */}
+      <div className="area" style={{ width: "100%" }}>
         <ul className="circles">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+          <li></li>
+
         </ul>
-        <div className='route' style={{ }}>
+        <div className='route' style={{}}>
           <RouterProvider router={router} />
         </div>
-    </div>
-{/* </body> */}
-    {/* <Timetable /> */}
-    {/* <Upcoming /> */}
+      </div>
+      {/* </body> */}
+      {/* <Timetable /> */}
+      {/* <Upcoming /> */}
     </div>
     {/* <App /> */}
   </React.StrictMode>,
