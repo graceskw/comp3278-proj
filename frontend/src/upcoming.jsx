@@ -220,7 +220,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						{<a href={db.Note} target='_blank' rel='noreferrer'>{db.Note}</a>}
+						{<a href={db.Lecture_Note} target='_blank' rel='noreferrer'>{db.Lecture_Note}</a>}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -240,7 +240,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						{<a href={db.Note} target='_blank' rel='noreferrer'>{db.Note}</a>}
+						{<a href={db.Tutorial_Note} target='_blank' rel='noreferrer'>{db.Tutorial_Note}</a>}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
@@ -255,7 +255,7 @@ export default function ControlledAccordions() {
 				</AccordionSummary>
 				<AccordionDetails>
 					<Typography>
-						{db.otherMaterials}
+						{<a href={db.Assignment} target='_blank' rel='noreferrer'>{db.Assignment}</a>}
 					</Typography>
 				</AccordionDetails>
 			</Accordion>
