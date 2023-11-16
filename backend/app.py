@@ -128,7 +128,8 @@ def check_1hr(user_id):
         # # return "class"
         return get_materials(result[0], result[1])
     else:
-        return "N/A"
+        return jsonify("N/A")
+        # return "N/A"
 
 @app.route('/api/get_course_data/<int:user_id>', methods=['GET'])
 def get_course_data(user_id):
@@ -322,14 +323,12 @@ def success():
 def sendEmail(user_id):
     msg = Message('Upcoming class reminder', sender = 'miscellaneous_acc@outlook.com', recipients = ['miscellaneous_acc@outlook.com'])
     result = check_1hr(user_id)
-    if not result:
+    
+    # right now doesnt work if no upcoming class
+    if result == "N/A":
         msg.body = 'No upcoming class.'
     else:
-        # print(result)
-        # print(get_materials(result[0], result[1]))
-        # msg.body = str(get_materials(result[0], result[1]))
         msg.body = str(result)
-    # msg.body = str(get_materials(0,'lecture'))            # for testing
     mail.send(msg)
     
     return "Sent"

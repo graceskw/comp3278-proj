@@ -47,7 +47,9 @@ export default function ControlledAccordions() {
       const response = await fetch(`http://localhost:5000/check_within1hr/${sessionStorage.getItem('user')}`); // TODO: Replace '0' with user id.
     //   const response = await fetch(`http://localhost:5000/api/get_course_data/${sessionStorage.getItem('user')}`); // TODO: Replace '0' with user id.
     //   const response = await fetch('http://localhost:5000/api/get_course_data/0'); // TODO: Replace '0' with user id.
-      const jsonData = await response.json();
+		// console.log('response', response.json())
+		const jsonData = await response.json();
+		console.log('jsonData', jsonData)
       setData(jsonData);
 	//   console.log('jsonData', jsonData)
     } catch (error) {
@@ -91,20 +93,20 @@ export default function ControlledAccordions() {
 					</Typography>
 					{/* change to data from db later */}
 					<Typography variant="h5" component="div">
-						{db.name=='N/A'? 'No upcoming course' : `${db.course_code} ${db.name}`}
+						{db=='N/A'? 'No upcoming course' : `${db.course_code} ${db.name}`}
 						{/* {db.upcomingCourse} */}
 					</Typography>
 					<Typography variant="body1">
-						{db.start_time=='N/A'? 'N/A' : `${db.start_time} to ${db.end_time}`}
+						{db=='N/A'? 'N/A' : `${db.start_time} to ${db.end_time}`}
 						{/* {db.upcomingCourseTime} */}
 					</Typography>
 					<Typography variant="body1">
-						{db.location=='N/A'? 'N/A' : `@${db.location}`}
+						{db=='N/A'? 'N/A' : `@${db.location}`}
 						{/* {db.upcomingCourseLocation} */}
 					</Typography>
 				</CardContent>
 
-				<div style={{ display: "flex", justifyContent: "space-evenly", maxWidth: "60%", margin: "auto", marginBottom: 20 }}>
+				<div styleload={{ display: "flex", justifyContent: "space-evenly", maxWidth: "60%", margin: "auto", marginBottom: 20 }}>
 					<Button variant="contained" onClick={handleOpenZoom}>Zoom links</Button>
 					<Button variant="contained" onClick={handleOpenEmail}>Send to email</Button>
 				</div>
@@ -131,7 +133,7 @@ export default function ControlledAccordions() {
 						<CloseIcon />
 					</IconButton>
 					<DialogContent dividers>
-						{db.zoom_link=='N/A'? 'N/A' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>}
+						{db=='N/A'? 'N/A' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>}
 					</DialogContent>
 				</Dialog>
 
@@ -158,10 +160,10 @@ export default function ControlledAccordions() {
 					</IconButton>
 					<DialogContent dividers>
 						<Typography gutterBottom>
-							{db.name=='N/A'? 'No upcoming course' : `${db.course_code} ${db.name}`} <br/>
-							{db.start_time=='N/A'? 'N/A' : `${db.start_time} to ${db.end_time}`} <br/>
-							{db.location=='N/A'? 'N/A' : `@${db.location}`} <br/>
-							{db.zoom_link=='N/A'? 'N/A' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>} <br/>
+							{db=='N/A'? `No upcoming course` : `${db.course_code} ${db.name}`} <br/>
+							{db=='N/A'? 'N/A' : `${db.start_time} to ${db.end_time}`} <br/>
+							{db=='N/A'? 'N/A' : `@${db.location}`} <br/>
+							{db=='N/A'? 'N/A' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>} <br/>
 							{`Teacher's message: ${db.message}`} <br/>
 							{db.Note===undefined? 'Notes: N/A' : `Notes: ${db.Note}`} <br/>
 						</Typography>
