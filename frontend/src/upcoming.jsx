@@ -97,11 +97,11 @@ export default function ControlledAccordions() {
 						{/* {db.upcomingCourse} */}
 					</Typography>
 					<Typography variant="body1">
-						{db=='N/A'? 'N/A' : `${db.start_time} to ${db.end_time}`}
+						{db=='N/A'? '' : `${db.start_time} to ${db.end_time}`}
 						{/* {db.upcomingCourseTime} */}
 					</Typography>
 					<Typography variant="body1">
-						{db=='N/A'? 'N/A' : `@${db.location}`}
+						{db=='N/A'? '' : `@${db.location}`}
 						{/* {db.upcomingCourseLocation} */}
 					</Typography>
 				</CardContent>
@@ -161,11 +161,13 @@ export default function ControlledAccordions() {
 					<DialogContent dividers>
 						<Typography gutterBottom>
 							{db=='N/A'? `No upcoming course` : `${db.course_code} ${db.name}`} <br/>
-							{db=='N/A'? 'N/A' : `${db.start_time} to ${db.end_time}`} <br/>
-							{db=='N/A'? 'N/A' : `@${db.location}`} <br/>
-							{db=='N/A'? 'N/A' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>} <br/>
-							{`Teacher's message: ${db.message}`} <br/>
-							{db.Note===undefined? 'Notes: N/A' : `Notes: ${db.Note}`} <br/>
+							{db=='N/A'? '' : `${db.start_time} to ${db.end_time}`} <br/>
+							{db=='N/A'? '' : `@${db.location}`} <br/>
+							{db=='N/A'? '' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>} <br/>
+							{db=='N/A'? '' : `Teacher's message: ${db.message}`} <br/>
+							{db=='N/A'? '' : `Lecture notes: ${db.Lecture_Note}`} <br/>
+							{db=='N/A'? '' : `Tutorial notes: ${db.Tutorial_Note}`} <br/>
+							{db=='N/A'? '' : `Other materials: ${db.Assignment}`} <br/>
 						</Typography>
 					</DialogContent>
 					<DialogActions>
