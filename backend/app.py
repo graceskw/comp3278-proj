@@ -126,7 +126,7 @@ def check_1hr(user_id):
     if result:
         return (result[0], result[1])
     else:
-        return False
+        return 'N/A'
 
 @app.route('/api/get_course_data/<int:user_id>', methods=['GET'])
 def get_course_data(user_id):

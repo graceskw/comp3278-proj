@@ -43,7 +43,9 @@ export default function ControlledAccordions() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/get_course_data/0'); // TODO: Replace '0' with user id.
+		// console.log('sessionStorage.getItem', sessionStorage.getItem('user'))
+      const response = await fetch(`http://localhost:5000/api/get_course_data/${sessionStorage.getItem('user')}`); // TODO: Replace '0' with user id.
+    //   const response = await fetch('http://localhost:5000/api/get_course_data/0'); // TODO: Replace '0' with user id.
       const jsonData = await response.json();
       setData(jsonData);
     } catch (error) {
@@ -87,7 +89,8 @@ export default function ControlledAccordions() {
 					</Typography>
 					{/* change to data from db later */}
 					<Typography variant="h5" component="div">
-						{db.upcomingCourse}
+						{db.upcomingCourse=='N/A'? 'No upcoming course' : db.upcomingCourse}
+						{/* {db.upcomingCourse} */}
 					</Typography>
 					<Typography variant="body1">
 						{db.upcomingCourseTime}
@@ -124,7 +127,8 @@ export default function ControlledAccordions() {
 						<CloseIcon />
 					</IconButton>
 					<DialogContent dividers>
-						<Typography gutterBottom>
+						{/* {db.upcomingCourse=='N/A'? 'N/A' : db.} */}
+						{/* <Typography gutterBottom>
 							<a href="https://www.google.com" target='_blank' rel='noreferrer'>Thursday, November 9, 2023 at 1:26:41 PM</a>
 						</Typography>
 						<Divider />
@@ -134,7 +138,7 @@ export default function ControlledAccordions() {
 						<Divider />
 						<Typography gutterBottom>
 							<a href="https://www.google.com" target='_blank' rel='noreferrer'>Thursday, November 2, 2023 at 1:23:54 PM</a>
-						</Typography>
+						</Typography> */}
 					</DialogContent>
 				</Dialog>
 
