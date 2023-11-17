@@ -28,6 +28,15 @@ function ResponsiveAppBar() {
   };
 
   const handleLogout = () => {
+    // Send an API request to the backend to logout
+    var userId = sessionStorage.getItem('user');
+    fetch(`http://localhost:5000/logout/${userId}`, {
+      method: 'POST',
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+      });
     setAnchorElUser(null);
     sessionStorage.clear();
   };
