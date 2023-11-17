@@ -37,6 +37,9 @@ export default function ControlledAccordions() {
 	const handleOpenEmail = () => setOpenEmail(true);
 	const handleCloseEmail = () => setOpenEmail(false);
 	const [db, setData] = React.useState(null);
+	const [lectureNotes, setLectureNotes] = React.useState(null);
+	const [tutorialNotes, setTutorialNotes] = React.useState(null);
+	const [otherMaterials, setOtherMaterials] = React.useState(null);
 	  React.useEffect(() => {
 		fetchData();
 	  }, []);
@@ -44,13 +47,21 @@ export default function ControlledAccordions() {
   const fetchData = async () => {
     try {
 		// console.log('sessionStorage.getItem', sessionStorage.getItem('user'))
-      const response = await fetch(`http://localhost:5000/check_within1hr/${sessionStorage.getItem('user')}`); // TODO: Replace '0' with user id.
+      const response = await fetch(`http://localhost:5000/check_within1hr/${sessionStorage.getItem('user')}`);
     //   const response = await fetch(`http://localhost:5000/api/get_course_data/${sessionStorage.getItem('user')}`); // TODO: Replace '0' with user id.
     //   const response = await fetch('http://localhost:5000/api/get_course_data/0'); // TODO: Replace '0' with user id.
 		// console.log('response', response.json())
 		const jsonData = await response.json();
 		console.log('jsonData', jsonData)
       setData(jsonData);
+	  if(db != 'N/A'){
+		setLectureNotes(jsonData.Lecture_Note)
+		setTutorialNotes(jsonData.Tutorial_Note)
+		setOtherMaterials(jsonData.Assignment)
+		console.log('lectureNotes', lectureNotes)
+		console.log('tutorialNotes', tutorialNotes)
+		console.log('otherMaterials', otherMaterials)
+	  }
 	//   console.log('jsonData', jsonData)
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -165,9 +176,9 @@ export default function ControlledAccordions() {
 							{db=='N/A'? '' : `@${db.location}`} <br/>
 							{db=='N/A'? '' : <a href={db.zoom_link} target='_blank' rel='noreferrer'>{db.zoom_link}</a>} <br/>
 							{db=='N/A'? '' : `Teacher's message: ${db.message}`} <br/>
-							{db=='N/A'? '' : `Lecture notes: ${db.Lecture_Note}`} <br/>
-							{db=='N/A'? '' : `Tutorial notes: ${db.Tutorial_Note}`} <br/>
-							{db=='N/A'? '' : `Other materials: ${db.Assignment}`} <br/>
+							{db=='N/A' || db.Lecture_Note==undefined? '' : `Lecture notes: ${db.Lecture_Note}`} <br/>
+							{db=='N/A' || db.Tutorial_Note==undefined? '' : `Tutorial notes: ${db.Tutorial_Note}`} <br/>
+							{db=='N/A' || db.Assignment==undefined? '' : `Other materials: ${db.Assignment}`} <br/>
 						</Typography>
 					</DialogContent>
 					<DialogActions>
@@ -221,9 +232,13 @@ export default function ControlledAccordions() {
 					<Typography sx={{ width: '33%', flexShrink: 0 }}>Lecture notes</Typography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<Typography>
-						{<a href={db.Lecture_Note} target='_blank' rel='noreferrer'>{db.Lecture_Note}</a>}
-					</Typography>
+					<div>
+						{lectureNotes == null ? 'N/A' : lectureNotes.map((item) =>
+							<div>
+								<a href={item} target='_blank' rel='noreferrer'>{item}</a><br/>
+							</div>
+						)}
+					</div>
 				</AccordionDetails>
 			</Accordion>
 
@@ -241,9 +256,13 @@ export default function ControlledAccordions() {
 		  </Typography> */}
 				</AccordionSummary>
 				<AccordionDetails>
-					<Typography>
-						{<a href={db.Tutorial_Note} target='_blank' rel='noreferrer'>{db.Tutorial_Note}</a>}
-					</Typography>
+					<div>
+						{tutorialNotes == null ? 'N/A' : tutorialNotes.map((item) =>
+							<div>
+								<a href={item} target='_blank' rel='noreferrer'>{item}</a><br/>
+							</div>
+						)}
+					</div>
 				</AccordionDetails>
 			</Accordion>
 
@@ -256,9 +275,13 @@ export default function ControlledAccordions() {
 					<Typography sx={{ width: '33%', flexShrink: 0 }}>Other materials</Typography>
 				</AccordionSummary>
 				<AccordionDetails>
-					<Typography>
-						{<a href={db.Assignment} target='_blank' rel='noreferrer'>{db.Assignment}</a>}
-					</Typography>
+					<div>
+						{otherMaterials == null ? 'N/A' : otherMaterials.map((item) =>
+							<div>
+								<a href={item} target='_blank' rel='noreferrer'>{item}</a><br/>
+							</div>
+						)}
+					</div>
 				</AccordionDetails>
 			</Accordion>
 		</div>
