@@ -198,7 +198,7 @@ export default function ControlledAccordions() {
 					<div>
 						{lectureNotes == null ? 'N/A' : lectureNotes.map((item) =>
 							<div>
-								<a href={item} target='_blank' rel='noreferrer'>{item}</a><br/>
+								<a href={item} target='_blank' rel='noreferrer'>Lecture note</a><br/>
 							</div>
 						)}
 					</div>
@@ -222,7 +222,7 @@ export default function ControlledAccordions() {
 					<div>
 						{tutorialNotes == null ? 'N/A' : tutorialNotes.map((item) =>
 							<div>
-								<a href={item} target='_blank' rel='noreferrer'>{item}</a><br/>
+								<a href={item} target='_blank' rel='noreferrer'>Tutorial note</a><br/>
 							</div>
 						)}
 					</div>
@@ -241,7 +241,7 @@ export default function ControlledAccordions() {
 					<div>
 						{otherMaterials == null ? 'N/A' : otherMaterials.map((item) =>
 							<div>
-								<a href={item} target='_blank' rel='noreferrer'>{item}</a><br/>
+								<a href={item} target='_blank' rel='noreferrer'>Assignment</a><br/>
 							</div>
 						)}
 					</div>
