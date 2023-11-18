@@ -35,7 +35,7 @@ CREATE TABLE class (
 
 -- Create the 'session' table
 CREATE TABLE session (
-    session_id INT PRIMARY KEY,
+    session_id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INT,
     login_time DATETIME,
     logout_time DATETIME,
