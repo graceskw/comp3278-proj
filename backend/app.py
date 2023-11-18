@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from flask_cors import CORS
 from flask_mail import Mail, Message
 
-db = SQL("sqlite:///main.db")
+db = SQL("sqlite:///data.db")
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
@@ -87,39 +87,8 @@ def login():
     # Create session if highest confidence is greater than 40
     if highest_confidence > 40:
         session["user_id"] = user["user_id"]
-        # Add user to session table
-        # Get the date and time in one string
-        now = datetime.now()
-        date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-        # Get the last row of the session table
-        last_row = db.execute("SELECT * FROM session ORDER BY session_id DESC LIMIT 1")
-        db.execute("INSERT INTO session (user_id, login_time) VALUES (?, ?)", user["user_id"], date_time)
         return str(user["user_id"])
     return redirect("/")
-
-@app.route("/logout/<int:user_id>", methods=["POST"])
-def logout(user_id):
-    # Update the last row of the session table from NULL to the current time
-    now = datetime.now()
-    date_time = now.strftime("%Y-%m-%d %H:%M:%S")
-    print(str(user_id) + ' was logged out at ' + str(date_time))
-    # Update the last row, where the logout time is NULL
-    db.execute("""
-        UPDATE session 
-        SET logout_time = ? 
-        WHERE session_id IN (
-            SELECT session_id 
-            FROM session 
-            WHERE user_id = ? AND logout_time IS NULL
-            ORDER BY session_id DESC 
-            LIMIT 1
-        )
-    """, date_time, user_id)
-    # Clear the session
-    session.clear()
-    # Return OK
-    return "OK"
-
 
 #It check whether the user have class which is within 1 hr. If so, return the course_id. Else, return No recent lectures
 @app.route("/check_within1hr/<int:user_id>")
@@ -225,6 +194,29 @@ def get_course_data(user_id):
         
         return jsonify(db)
 
+@app.route('/get_enrolled_courses/<int:user>')
+def get_enrolled_courses(user):
+    conn = sqlite3.connect('main.db')
+    c = conn.cursor()
+    c.execute("""
+    SELECT C.course_id, C.name
+    FROM course C, enrollment E
+    WHERE E.user_id = ?
+    AND C.course_id = E.course_id
+    """, (user,))
+    print("getting enrolled courses")
+    rows = c.fetchall()
+    c.close()
+    conn.close()
+    course_info = {}
+    course_names = []
+    course_ids = []
+    for row in rows:
+        course_names.append(row[1])
+        course_ids.append(row[0])
+    print(course_names)
+    return {'course_names':course_names, 'course_ids':course_ids}
+    
 @app.route("/course_info/<int:course_id>/<class_type>")
 def get_materials(course_id, class_type):
     conn = sqlite3.connect('main.db')
@@ -363,13 +355,6 @@ def sendEmail(user_id):
     mail.send(msg)
     
     return "Sent"
-
-@app.route('/profile/<int:user_id>', methods=['GET'])
-def profile(user_id):
-    # Join the session and users table and return the whole row
-    data = db.execute("SELECT * FROM session JOIN users ON session.user_id = users.user_id WHERE session.user_id = ?", user_id)
-    print(data)
-    return jsonify(data)
 
 if __name__ == '__main__':
     app.run()
