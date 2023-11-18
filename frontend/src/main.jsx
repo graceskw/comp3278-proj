@@ -9,6 +9,7 @@ import Login from './login.jsx'
 import Timetable from './timetable.jsx'
 import Component from './component.jsx'
 import Upcoming from './upcoming.jsx'
+import Courses from './courses.jsx'
 import Profile from './profile.jsx'
 // import './index.css'
 import './main.css'
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/timetable",
     element: <><Component /><Timetable /></>,
+  },
+  {
+    path: "/courses",
+    element: <><Component /><Courses /></>,
   },
   {
     path: "/profile",
