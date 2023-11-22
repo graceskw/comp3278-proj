@@ -99,6 +99,14 @@ function ResponsiveAppBar() {
               Timetable
             </Button>
 
+            <Button
+              component={Link} to="/courses"
+              variant='outlined'
+              sx={{ my: 2, color: 'white', display: 'block', borderWidth: 2, borderColor: '#9dc8f3', marginRight: '10px' }}
+            >
+              Courses
+            </Button>
+
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

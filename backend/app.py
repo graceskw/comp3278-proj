@@ -85,7 +85,7 @@ def login():
                 highest_confidence = confidence  # Update highest confidence
 
     # Create session if highest confidence is greater than 40
-    if highest_confidence > 40:
+    if highest_confidence > 10:
         session["user_id"] = user["user_id"]
         # Add user to session table
         # Get the date and time in one string
@@ -225,6 +225,29 @@ def get_course_data(user_id):
         
         return jsonify(db)
 
+@app.route('/get_enrolled_courses/<int:user>')
+def get_enrolled_courses(user):
+    conn = sqlite3.connect('main.db')
+    c = conn.cursor()
+    c.execute("""
+    SELECT C.course_id, C.name
+    FROM course C, enrollment E
+    WHERE E.user_id = ?
+    AND C.course_id = E.course_id
+    """, (user,))
+    print("getting enrolled courses")
+    rows = c.fetchall()
+    c.close()
+    conn.close()
+    course_info = {}
+    course_names = []
+    course_ids = []
+    for row in rows:
+        course_names.append(row[1])
+        course_ids.append(row[0])
+    print(course_names)
+    return {'course_names':course_names, 'course_ids':course_ids}
+    
 @app.route("/course_info/<int:course_id>/<class_type>")
 def get_materials(course_id, class_type):
     conn = sqlite3.connect('main.db')
@@ -370,6 +393,7 @@ def profile(user_id):
     data = db.execute("SELECT * FROM session JOIN users ON session.user_id = users.user_id WHERE session.user_id = ?", user_id)
     print(data)
     return jsonify(data)
+
 
 if __name__ == '__main__':
     app.run()
