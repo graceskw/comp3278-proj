@@ -1,0 +1,39 @@
+.Name, .Email, .LoginDate{
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.Email{
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.LoginDate{
+    font-size: 15px;
+    font-weight: normal;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.UserContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.UserContainer > h4{
+    margin-top: 20px;
+}
+
+.UserIcon{
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+}

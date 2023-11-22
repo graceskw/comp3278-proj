@@ -11,13 +11,50 @@ import {
   Button,
   Tooltip,
   MenuItem,
+  Divider,
 } from '@mui/material/';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-
-const settings = ['Profile', 'Logout'];
+import UserIcon from './assets/user.png';
+import axios from 'axios';
+import './components.css';
 
 function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isFirstLogin, setIsFirstLogin] = React.useState(false);
+  const [profile, setProfile] = React.useState(null);
+
+  React.useEffect(() => {
+    const firstLogin = localStorage.getItem('firstLogin');
+    if (!firstLogin) {
+      setIsFirstLogin(true);
+      localStorage.setItem('firstLogin', 'false');
+    }
+    const userId = sessionStorage.getItem('user');
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/profile/${userId}`);
+        if (response.data.length > 0) {
+          const lastLoginSession = response.data[response.data.length - 1];
+          setProfile({
+            name: lastLoginSession.name,
+            email: lastLoginSession.email,
+            lastLogin: lastLoginSession.login_time,
+          });
+        }
+      } catch (error) {
+        console.error('Failed to fetch profile data:', error);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  React.useEffect(() => {
+    if (isFirstLogin) {
+      // It is the first login so open the menu and then immediately set isFirstLogin to false
+      setAnchorElUser(document.querySelector('button[aria-label=Profile]'));
+      setIsFirstLogin(false);
+    }
+  }, [isFirstLogin]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -28,7 +65,6 @@ function ResponsiveAppBar() {
   };
 
   const handleLogout = () => {
-    // Send an API request to the backend to logout
     var userId = sessionStorage.getItem('user');
     fetch(`http://localhost:5000/logout/${userId}`, {
       method: 'POST',
@@ -39,6 +75,7 @@ function ResponsiveAppBar() {
       });
     setAnchorElUser(null);
     sessionStorage.clear();
+    localStorage.removeItem('firstLogin');
   };
 
   return (
@@ -66,9 +103,7 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Profile">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                {/* later maybe let user change profile icon */}
-                {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} aria-label="Profile">
                 <AccountCircle />
               </IconButton>
             </Tooltip>
@@ -88,6 +123,16 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              {profile && (
+                <div className="UserContainer">
+                  <img src={UserIcon} className="UserIcon"/>
+                  <div className="Name">Hello, {profile.name}</div>
+                  <div className="Email">{profile.email}</div>
+                  <h4>Last Login:</h4>
+                  <div className="LoginDate">{new Date(profile.lastLogin).toLocaleString()}</div>
+                  <Divider />
+                </div>
+              )}
               <MenuItem key='profile' onClick={handleCloseUserMenu} component={Link} to="/profile">
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
@@ -101,4 +146,6 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
+
